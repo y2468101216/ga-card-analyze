@@ -431,12 +431,12 @@ export default function App() {
 
       <div className="versionFooter">
         {apiVersion ? (
-          <a href="/api/version" target="_blank" rel="noreferrer">
-            API {apiVersion.name}@{apiVersion.version}
+          <span>
+            Web {apiVersion.name}@{apiVersion.version}
             {apiVersion.commit ? ` (${String(apiVersion.commit).slice(0, 7)})` : ''}
-          </a>
+          </span>
         ) : (
-          <span>API (unknown)</span>
+          <span>Web (unknown)</span>
         )}
       </div>
     </>
