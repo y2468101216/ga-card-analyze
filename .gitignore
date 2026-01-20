@@ -12,3 +12,6 @@ node_modules/
 
 # local sqlite
 identifier.sqlite
+
+# temp files
+.$*.dtmp
