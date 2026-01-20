@@ -15,12 +15,18 @@ export default defineConfig(({ mode }) => {
 
   return {
     base,
+    // Use the React entry under /web as the Vite app root.
+    root: 'web',
     plugins: [react()],
     define: {
       __APP_VERSION__: JSON.stringify(pkg.version)
     },
     // Serve /data/gatcg.sqlite and /sql-wasm.wasm from here (copied in repo).
-    publicDir: 'web/public',
+    publicDir: 'public',
+    build: {
+      outDir: '../dist',
+      emptyOutDir: true
+    },
     server: {
       port: vitePort,
       strictPort: true,
