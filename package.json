@@ -1,0 +1,38 @@
+{
+  "name": "grandarchivecalcweb",
+  "version": "1.0.0",
+  "description": "",
+  "license": "MIT",
+  "author": "Yun",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "crawl:cards": "node src/index.js",
+    "db:sync": "node src/cli.js sync",
+    "db:search": "node src/cli.js search",
+    "db:get": "node src/cli.js get",
+    "db:state": "node src/cli.js state",
+    "api": "node server/index.js",
+    "web:dev": "vite",
+    "web:build": "vite build",
+    "dev": "node run.js",
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.7.0",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "mocha": "^10.2.0",
+    "nodemon": "^3.1.11",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^2.15.4",
+    "vite": "^5.4.21"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.10.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.22.1"
+  }
+}
