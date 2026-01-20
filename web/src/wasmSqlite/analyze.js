@@ -1,4 +1,4 @@
-import { analyzeCore } from '../../../src/analyze/core'
+import { analyzeCore } from '../../../src/analyze/core.mjs'
 import { getLatestCardByNameWasm, getCardImageUrl } from './cardRepo'
 
 export async function analyzeDeckWasm(deckText, wasmOpts) {
