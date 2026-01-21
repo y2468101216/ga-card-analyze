@@ -10,6 +10,33 @@ function fmtPct(n) {
   return `${(n * 100).toFixed(1)}%`
 }
 
+function isZeroRatio(r) {
+  // Defensive: treat non-finite as zero-ish for display.
+  return !Number.isFinite(r) || r <= 0
+}
+
+function pieDataNonZero(list) {
+  const arr = Array.isArray(list) ? list : []
+  // Remove 0% slices entirely.
+  return arr.filter(d => Number(d?.count) > 0 && !isZeroRatio(d?.ratio))
+}
+
+function pieLabel(key) {
+  return (d) => {
+    const ratio = d?.ratio
+    if (isZeroRatio(ratio)) return ''
+    return `${d[key]} ${d.count} (${fmtPct(ratio)})`
+  }
+}
+
+function pieTooltip(nameKey) {
+  return (value, _name, props) => {
+    const ratio = props?.payload?.ratio
+    if (isZeroRatio(ratio)) return ['', '']
+    return [`${value} (${fmtPct(ratio)})`, props?.payload?.[nameKey] ?? _name]
+  }
+}
+
 function bucketTooltipFormatter(value, name, props) {
   const ratio = props?.payload?.ratio
   if (name === 'count') return [`${value} (${fmtPct(ratio)})`, 'count']
@@ -297,16 +324,16 @@ export default function App() {
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
-                      data={analysis.main.elementBuckets}
+                      data={pieDataNonZero(analysis.main.elementBuckets)}
                       dataKey="count"
                       nameKey="element"
-                      label={(d) => `${d.element} ${d.count} (${fmtPct(d.ratio)})`}
+                      label={pieLabel('element')}
                     >
-                      {analysis.main.elementBuckets.map((_, i) => (
+                      {pieDataNonZero(analysis.main.elementBuckets).map((_, i) => (
                         <Cell key={i} fill={COLORS[i % COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip formatter={(v, _, p) => [`${v} (${fmtPct(p.payload.ratio)})`, p.payload.element]} />
+                    <Tooltip formatter={pieTooltip('element')} />
                   </PieChart>
                 </ResponsiveContainer>
               ) : (
@@ -319,16 +346,16 @@ export default function App() {
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
-                      data={analysis.main.typeBuckets}
+                      data={pieDataNonZero(analysis.main.typeBuckets)}
                       dataKey="count"
                       nameKey="type"
-                      label={(d) => `${d.type} ${d.count} (${fmtPct(d.ratio)})`}
+                      label={pieLabel('type')}
                     >
-                      {analysis.main.typeBuckets.map((_, i) => (
+                      {pieDataNonZero(analysis.main.typeBuckets).map((_, i) => (
                         <Cell key={i} fill={COLORS[i % COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip formatter={(v, _, p) => [`${v} (${fmtPct(p.payload.ratio)})`, p.payload.type]} />
+                    <Tooltip formatter={pieTooltip('type')} />
                   </PieChart>
                 </ResponsiveContainer>
               ) : (
@@ -365,16 +392,16 @@ export default function App() {
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
-                          data={analysis.main.drawDiscardStats.effectClassBuckets}
+                          data={pieDataNonZero(analysis.main.drawDiscardStats.effectClassBuckets)}
                           dataKey="count"
                           nameKey="label"
-                          label={(d) => `${d.label} ${d.count} (${fmtPct(d.ratio)})`}
+                          label={pieLabel('label')}
                         >
-                          {analysis.main.drawDiscardStats.effectClassBuckets.map((_, i) => (
+                          {pieDataNonZero(analysis.main.drawDiscardStats.effectClassBuckets).map((_, i) => (
                             <Cell key={i} fill={COLORS[i % COLORS.length]} />
                           ))}
                         </Pie>
-                        <Tooltip formatter={(v, _, p) => [`${v} (${fmtPct(p.payload.ratio)})`, p.payload.label]} />
+                        <Tooltip formatter={pieTooltip('label')} />
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
